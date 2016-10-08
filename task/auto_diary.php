@@ -2,7 +2,7 @@
 include_once("inc/utility_all.php");
 include_once("inc/utility_file.php");
 include_once("inc/utility_org.php");
-$datetime=date("Y-m-d",strtotime("-1 day"));
+$datetime=date("Ymd",strtotime("-1 day"));
 if(is_holiday($datetime)==0)
 {
     is_insertnotify();
@@ -11,22 +11,23 @@ if(is_holiday($datetime)==0)
     echo '休息日';
 }
 
-
-
-
-
 //返回 0 工作日 1 休息日 2 节假日
 function is_holiday($datetime){
+
     $ch = curl_init();
     $url = 'http://apis.baidu.com/xiaogg/holiday/holiday?d='.$datetime;
     $header = array(
-        'apikey: cde64f28ad886bb7aa5492a0e47c4fb1',
+        'apikey:10bd2a414d2ba1052f37c7fd2a1aafad',
     );
+    // 添加apikey到header
     curl_setopt($ch, CURLOPT_HTTPHEADER  , $header);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // 执行HTTP请求
     curl_setopt($ch , CURLOPT_URL , $url);
     $res = curl_exec($ch);
-    return $res;
+    $res = json_decode($res['body'],true);
+	return $res;
+     
 }
 function is_nodiary(){
     $dt=date("Y-m-d",strtotime("-1 day"));
