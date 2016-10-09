@@ -3,13 +3,13 @@ include_once("inc/utility_all.php");
 include_once("inc/utility_file.php");
 include_once("inc/utility_org.php");
 $datetime=date("Ymd",strtotime("-1 day"));
-if(is_holiday($datetime)==0)
-{
+if(is_holiday($datetime)==0) {
     is_insertnotify();
 
 }elseif(is_holiday($datetime)==1){
     echo '休息日';
 }
+
 
 //返回 0 工作日 1 休息日 2 节假日
 function is_holiday($datetime){
