@@ -27,7 +27,7 @@ if($BEGIN_DATE=="")
       </td>
       <td ><?=_("人员：")?>
           <input type="text" name="COPY_TO_NAME" size="10" class="BigStatic" readonly value="<?=$COPY_TO_NAME?>">
-          <a href="javascript:;" class="orgAdd" onClick="SelectUserSingle('96','','COPY_TO_ID', 'COPY_TO_NAME')"><?=_("添加")?></a>
+          <!--a href="javascript:;" class="orgAdd" onClick="SelectUserSingle('96','','COPY_TO_ID', 'COPY_TO_NAME')"><?=_("添加")?></a-->
           <input type="hidden" name="COPY_TO_ID" value="<?=$COPY_TO_ID?>">
       </td>
       <td>
