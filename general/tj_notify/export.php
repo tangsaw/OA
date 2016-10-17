@@ -13,27 +13,33 @@ $objExcel->setFileName(_("未提交工作日志统计结果".$CUR_DATE));
 $objExcel->addHead($EXCEL_OUT);
 
 
-$CONDITION_STR = " select * from td_oa.ud_usernodiary where 1=1 ";
 if($USER_DEPT_QRY != "") {
-    $CONDITION_STR.="and user_Dept='".$USER_DEPT_QRY."' ";
+    $CONDITION_STR_a.="and user_Dept='".$USER_DEPT_QRY."' ";
 }
 if($TYPE_QRY != "") {
-    //$CONDITION_STR.="and type='".$TYPE_QRY."' ";
+    $CONDITION_STR_a.="and typename='".$TYPE_QRY."' ";
+	if($TYPE_QRY=="0"){$tabeName="td_oa.ud_usernodiary";}
+	elseif($TYPE_QRY=="1"){$tabeName="td_oa.ud_usernomonthdiary";}
+	else{$tabeName="td_oa.ud_usernoquarterdiary";}
 }
 if($BEGIN_DATE_QRY != "") {
-    $CONDITION_STR.="and t_Date>='".$BEGIN_DATE_QRY."' ";
+    $CONDITION_STR_a.="and t_Date>='".$BEGIN_DATE_QRY."' ";
 }
 if($END_DATE_QRY != "") {
-    $CONDITION_STR.="and t_Date<='".$END_DATE_QRY."' ";
+    $CONDITION_STR_a.="and t_Date<='".$END_DATE_QRY."' ";
 }
 if($COPY_TO_ID_QRY != "") {
-    $CONDITION_STR.="and USER_ID ='".$COPY_TO_ID_QRY."' ";
+    $CONDITION_STR_a.="and USER_ID ='".$COPY_TO_ID_QRY."' ";
 }
 if($BEGIN_DATE_QRY == "" & $END_DATE_QRY == "" & $COPY_TO_ID_QRY == "") {
     $CONDITION_STR = " select * from td_oa.ud_usernodiary where 1 > 1 ";
     Message("没有输入查询条件，请重新输入！");
     Button_Back();
     exit;
+}
+else
+{
+	$CONDITION_STR = " select * from ".$tabeName." where 1=1 ".$CONDITION_STR_a;
 }
 $query = $CONDITION_STR." order by t_Date desc, DEPT_ID asc";
 $cursor = exequery(TD::conn(),$query);

@@ -68,26 +68,31 @@ include_once("inc/header.inc.php");
     </tr>
     <?
     //============================ 显示查询结果 =======================================
-    $CONDITION_STR = " select * from td_oa.ud_usernodiary where 1=1 ";
+    
     if($USER_DEPT != "") {
-        $CONDITION_STR.="and user_Dept='".$USER_DEPT."' ";
+        $CONDITION_STR_a.="and user_Dept='".$USER_DEPT."' ";
     }
     if($TYPE != "") {
-        //$CONDITION_STR.="and type='".$TYPE."' ";
+        $CONDITION_STR_a.="and typename='".$TYPE."' ";
+		if($TYPE=="0"){$tabeName="td_oa.ud_usernodiary";}
+		elseif($TYPE=="1"){$tabeName="td_oa.ud_usernomonthdiary";}
+		else{$tabeName="td_oa.ud_usernoquarterdiary";}
     }
     if($BEGIN_DATE != "") {
-        $CONDITION_STR.="and t_Date>='".$BEGIN_DATE."' ";
+        $CONDITION_STR_a.="and t_Date>='".$BEGIN_DATE."' ";
     }
     if($END_DATE != "") {
-        $CONDITION_STR.="and t_Date<='".$END_DATE."' ";
+        $CONDITION_STR_a.="and t_Date<='".$END_DATE."' ";
     }
     if($COPY_TO_ID != "") {
-        $CONDITION_STR.="and USER_ID ='".$COPY_TO_ID."' ";
+        $CONDITION_STR_a.="and USER_ID ='".$COPY_TO_ID."' ";
     }
     if($BEGIN_DATE == "" & $END_DATE == "" & $COPY_TO_ID == "") {
         $CONDITION_STR = " select * from td_oa.ud_usernodiary where 1 > 1 ";
         echo "<font color='red'>&nbsp;&nbsp;请输入查询条件,日期与人员至少输入一项！</font>";
     }
+	else
+	{$CONDITION_STR = " select * from ".$tabeName." where 1=1 ".$CONDITION_STR_a;}
     $query = $CONDITION_STR." order by t_Date desc, DEPT_ID asc";
     $cursor= exequery(TD::conn(),$query);
     $WORK_PLAN_COUNT=0;
