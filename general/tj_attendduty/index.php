@@ -4,6 +4,15 @@ include_once("inc/utility_all.php");
 include_once("inc/utility_file.php");
 include_once("inc/utility_org.php");
 include_once("inc/header.inc.php");
+	function get_UserPrvOnID($id,$delpId){
+		$sql="SELECT `user`.UID,`user`.USER_ID,`user`.USER_PRIV_NO,`user`.DEPT_ID FROM `user` where `user`.USER_ID=".$id;
+		if($delpId!="")
+		{
+			$sql.=" and `user`.DEPT_ID".$delpId;
+		}
+		$cursor = exequery(TD::conn(),$sql);
+		$ROW=mysql_fetch_array($cursor);
+		return $ROW["USER_PRIV_NO"];
 if($COPY_TO_NAME=="")
 {
 	$COPY_TO_NAME=$_SESSION["LOGIN_USER_NAME"];
@@ -12,6 +21,15 @@ if($BEGIN_DATE=="")
 {
 	$BEGIN_DATE=date("Y-m-d",strtotime("-1 day"));
 }
+if($COPY_TO_ID!="")
+{
+	if(get_UserPrvOnID($COPY_TO_ID,$userDeptID)<get_UserPrvOnID($userId,$userDeptID))
+	{
+		    Message("您没有权限查看此用户的考勤状况！");
+			Button_Back();
+	}
+}
+
 ?>
 <script src="<?=MYOA_JS_SERVER?>/static/js/module.js?v=<?=MYOA_SYS_VERSION?>"></script>
 <script src="/module/DatePicker/WdatePicker.js"></script>
@@ -27,7 +45,7 @@ if($BEGIN_DATE=="")
       </td>
       <td ><?=_("人员：")?>
           <input type="text" name="COPY_TO_NAME" size="10" class="BigStatic" readonly value="<?=$COPY_TO_NAME?>">
-          <!--a href="javascript:;" class="orgAdd" onClick="SelectUserSingle('96','','COPY_TO_ID', 'COPY_TO_NAME')"><?=_("添加")?></a-->
+          <a href="javascript:;" class="orgAdd" onClick="SelectUserSingle('96','','COPY_TO_ID', 'COPY_TO_NAME')"><?=_("选择人员")?></a>
           <input type="hidden" name="COPY_TO_ID" value="<?=$COPY_TO_ID?>">
       </td>
       <td>
@@ -92,6 +110,11 @@ if($BEGIN_DATE=="")
     }
 	    sqlsrv_free_stmt( $stmt);  
         sqlsrv_close( $conn ); 
+
+		
+
+}
+
 }
 ?>
 </table>
